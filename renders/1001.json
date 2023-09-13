@@ -1,0 +1,13 @@
+{
+    "name": "Checks PFP #1001",
+    "description": "PFP mirroring VV Checks #1001",
+    "image": "https://api.checks.art/checks/1001/pfp.png",
+    "svg": "data:image/svg+xml;base64,PHN2ZyB2aWV3Qm94PSIwIDAnPjwvZz48L2RlZnM+PC9zdmc+",
+    "animation_uri": "data:image/svg+xml;base64,PHN2ZyB2aWV3Qm94PSIwIDAgNjA4IDYwOCIgZmlsbD0ibm9uZSIgWN0Pjwvc3ZnPjwvc3ZnPjwvZz48L2RlZnM+PC9zdmc+",
+    "attributes": [
+        {
+            "trait_type": "Status",
+            "value": "Linked"
+        }
+    ]
+}
