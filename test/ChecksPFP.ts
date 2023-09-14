@@ -117,7 +117,7 @@ describe('ChecksPFP', () => {
     })
   })
 
-  describe.skip('Rendering', () => {
+  describe('Rendering', () => {
     it('Should render checks', async () => {
       const { checksPFP } = await loadFixture(deployChecksPFP)
 

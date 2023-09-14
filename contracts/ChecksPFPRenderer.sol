@@ -26,8 +26,9 @@ contract ChecksPFPRenderer is IRenderer {
     /// @dev Render the SVG.
     /// @param tokenId The token to render.
     function svg(uint256 tokenId) public view returns (string memory) {
-        (string[] memory colors,) = checks.colors(tokenId);
+        (string[] memory colors, uint256[] memory colorIndexes) = checks.colors(tokenId);
         uint256 count = colors.length;
+        bool isBlackCheck = colorIndexes[0] == 999;
 
         return string.concat(
             '<svg ',
@@ -35,8 +36,8 @@ contract ChecksPFPRenderer is IRenderer {
                 'fill="none" xmlns="http://www.w3.org/2000/svg" ',
                 'style="width:100vw;height:100vh;background:#808080;margin:auto;"',
             '>',
-                renderBackground(count, colors),
-                renderChecks(count),
+                renderBackground(count, colors, isBlackCheck),
+                renderChecks(count, isBlackCheck),
                 renderDefs(tokenId),
             '</svg>'
         );
@@ -59,7 +60,7 @@ contract ChecksPFPRenderer is IRenderer {
                 '"description": "',description,'",',
                 '"image": "https://api.checks.art/checks/',id,'/pfp.png",',
                 '"svg": ',img,'",',
-                '"animation_uri": ',img,'",',
+                '"animation_url": ',img,'",',
                 '"attributes": [', attributes(linked), ']',
             '}'
         );
@@ -68,18 +69,30 @@ contract ChecksPFPRenderer is IRenderer {
     /// @dev Render the background of the SVG.
     /// @param count Number of checks in the token.
     /// @param colors The colors of the checks token.
-    function renderBackground(uint256 count, string[] memory colors) private pure returns (string memory) {
-        string memory color = count > 1 ? '000' : colors[0];
+    /// @param isBlackCheck Whether this token is a black check.
+    function renderBackground(
+        uint256 count, string[] memory colors, bool isBlackCheck
+    ) private pure returns (string memory) {
+        string memory color = isBlackCheck
+            ? '000'
+            : count > 10
+                ? '000'
+                : count > 1
+                    ? 'ebebeb'
+                    : colors[0];
 
         return string.concat('<rect x="0" y="0" width="608" height="608" fill="#',color,'" />');
     }
 
     /// @dev Render the pfp body.
     /// @param count Number of checks in the token.
-    function renderChecks(uint256 count) private pure returns (string memory) {
+    /// @param isBlackCheck Whether this token is a black check.
+    function renderChecks(uint256 count, bool isBlackCheck) private pure returns (string memory) {
+        string memory color = isBlackCheck ? 'fff' : '111';
+
         return string.concat(
-            '<rect x="152" y="152" width="304" height="304" fill="#111" />',
-            '<rect x="152" y="520" width="304" height="88" fill="#111" />',
+            '<rect x="152" y="152" width="304" height="304" fill="#',color,'" />',
+            '<rect x="152" y="520" width="304" height="88" fill="#',color,'" />',
             '<mask id="head">',
                 count < 5
                     ? '<rect x="195" y="195.5" width="290" height="289" fill="white" />'
