@@ -26,6 +26,8 @@ contract Mirrored721 is ERC721 {
 
         if (from == address(0)) {
             _mint(to, tokenId);
+        } else if (to == address(0)) {
+            _burn(tokenId);
         } else {
             _transfer(from, to, tokenId);
         }
@@ -48,7 +50,11 @@ contract Mirrored721 is ERC721 {
     }
 
     function _ownerOfMirrored(uint256 tokenId) internal view virtual returns (address) {
-        return IERC721(_contract).ownerOf(tokenId);
+        try IERC721(_contract).ownerOf(tokenId) returns (address owner) {
+            return owner;
+        } catch {
+            return address(0);
+        }
     }
 
     function approve(address, uint256) public pure override {

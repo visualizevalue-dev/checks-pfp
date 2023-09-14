@@ -6,6 +6,7 @@ import { decodeBase64URI } from '../helpers/decode-uri'
 import { impersonate } from '../helpers/impersonate'
 import { JALIL, JALIL_VAULT, VV } from '../helpers/constants'
 import { ZeroAddress } from 'ethers'
+import { abi as ChecksAbi } from './abis/Checks.json'
 
 describe('ChecksPFP', () => {
   async function deployChecksPFP () {
@@ -16,7 +17,7 @@ describe('ChecksPFP', () => {
 
     const ChecksPFP = await deployments.get('ChecksPFP')
     const checksPFP = await ethers.getContractAt('ChecksPFP', ChecksPFP.address)
-    const checks = await ethers.getContractAt('ERC721', '0x036721e5A769Cc48B3189EFbb9ccE4471E8A48B1')
+    const checks = new ethers.Contract('0x036721e5A769Cc48B3189EFbb9ccE4471E8A48B1', ChecksAbi)
 
     return { checksPFP, checks, owner, jalilVault }
   }
@@ -114,6 +115,25 @@ describe('ChecksPFP', () => {
 
       expect(await checksPFP.ownerOf(1001)).to.equal(JALIL)
       expect(decodeBase64URI(await checksPFP.tokenURI(1001)).attributes[0].value).to.equal('Linked')
+    })
+
+    it('Should allow to burn PFP after Check was burned', async () => {
+      const { checksPFP, checks, jalilVault } = await loadFixture(deployChecksPFP)
+
+      // Mint the PFP
+      await checksPFP.connect(jalilVault).mirror(1001)
+      expect(decodeBase64URI(await checksPFP.tokenURI(1001)).attributes[0].value).to.equal('Linked')
+
+      // Transfer check
+      await checks.connect(jalilVault).inItForTheArt(2013, 1001)
+      await expect(checksPFP.tokenURI(1001)).to.be.reverted
+
+      // Remirror
+      await expect(checksPFP.mirror(1001))
+        .to.emit(checksPFP, 'Transfer')
+        .withArgs(JALIL_VAULT, ZeroAddress, 1001)
+
+      await expect(checksPFP.ownerOf(1001)).to.be.revertedWith('ERC721: invalid token ID')
     })
   })
 
