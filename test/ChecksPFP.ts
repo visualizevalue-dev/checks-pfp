@@ -9,7 +9,7 @@ import { ZeroAddress } from 'ethers'
 
 describe('ChecksPFP', () => {
   async function deployChecksPFP () {
-    await deployments.fixture('ChecksPFP')
+    await deployments.fixture(['ChecksPFPRenderer', 'ChecksPFP'])
 
     const [owner] = await ethers.getSigners()
     const jalilVault = await impersonate(JALIL_VAULT, hre)

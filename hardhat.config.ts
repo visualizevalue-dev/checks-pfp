@@ -7,7 +7,7 @@ const HARDHAT_NETWORK_CONFIG = {
   chainId: 1337,
   forking: {
     url: process.env.MAINNET_URL || '',
-    blockNumber: 17593000,
+    blockNumber: 18110000,
   },
   allowUnlimitedContractSize: true,
 }

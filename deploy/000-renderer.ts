@@ -4,25 +4,23 @@ import { DeployFunction } from 'hardhat-deploy/types'
 export const deployWithLibraries = async (
   hre: HardhatRuntimeEnvironment,
 ) => {
-  const { ethers, deployments, getNamedAccounts } = hre
+  const { deployments, getNamedAccounts } = hre
 	const { deploy } = deployments
 
 	const { deployer } = await getNamedAccounts()
 
-  const { address: pfpAddress } = await deploy('ChecksPFP', {
+  const { address: rendererAddress } = await deploy('ChecksPFPRenderer', {
     from: deployer,
     args: [],
+    libraries: {
+      Utilities: '0x9a4DCF3Fd4174F8F170F9b31eAf16001529ae613',
+    },
     log: true,
     autoMine: true,
   })
 
-  const checksPFP = await ethers.getContractAt('ChecksPFP', pfpAddress)
-  const renderer = await deployments.get('ChecksPFPRenderer')
-  await checksPFP.setRenderer(renderer.address)
-
   return {
-    rendererAddress: renderer.address,
-    pfpAddress,
+    rendererAddress,
   }
 }
 
@@ -32,4 +30,4 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
 
 export default func
 
-func.tags = ['ChecksPFP']
+func.tags = ['ChecksPFPRenderer']
