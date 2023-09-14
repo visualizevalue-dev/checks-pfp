@@ -3,6 +3,7 @@ import { HardhatUserConfig } from 'hardhat/config'
 import '@nomicfoundation/hardhat-toolbox'
 import 'hardhat-deploy'
 
+import './tasks/key'
 import './tasks/mirror'
 
 const HARDHAT_NETWORK_CONFIG = {
