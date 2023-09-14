@@ -1,6 +1,7 @@
 import 'dotenv/config'
 import { HardhatUserConfig } from 'hardhat/config'
 import '@nomicfoundation/hardhat-toolbox'
+import 'hardhat-deploy'
 
 const HARDHAT_NETWORK_CONFIG = {
   chainId: 1337,
@@ -19,6 +20,11 @@ const config: HardhatUserConfig = {
         enabled: true,
         runs: 1000,
       },
+    },
+  },
+  namedAccounts: {
+    deployer: {
+      default: 0, // first account as deployer
     },
   },
   networks: {

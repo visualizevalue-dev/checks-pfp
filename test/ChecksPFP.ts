@@ -1,7 +1,7 @@
 import fs from 'fs'
 import { loadFixture } from '@nomicfoundation/hardhat-toolbox/network-helpers'
 import { expect } from 'chai'
-import hre, { ethers } from 'hardhat'
+import hre, { ethers, deployments } from 'hardhat'
 import { decodeBase64URI } from '../helpers/decode-uri'
 import { impersonate } from '../helpers/impersonate'
 import { JALIL, JALIL_VAULT, VV } from '../helpers/constants'
@@ -9,25 +9,13 @@ import { ZeroAddress } from 'ethers'
 
 describe('ChecksPFP', () => {
   async function deployChecksPFP () {
+    await deployments.fixture('ChecksPFP')
+
     const [owner] = await ethers.getSigners()
-
-    const Utilities = await ethers.getContractFactory('Utilities')
-    const utilities = await Utilities.deploy()
-
-    const Renderer = await ethers.getContractFactory('ChecksPFPRenderer', {
-      libraries: {
-        Utilities: await utilities.getAddress(),
-      }
-    })
-    const renderer = await Renderer.deploy()
-
-    const ChecksPFP = await ethers.getContractFactory('ChecksPFP')
-    const checksPFP = await ChecksPFP.deploy()
-
-    await checksPFP.setRenderer(await renderer.getAddress())
-
     const jalilVault = await impersonate(JALIL_VAULT, hre)
 
+    const ChecksPFP = await deployments.get('ChecksPFP')
+    const checksPFP = await ethers.getContractAt('ChecksPFP', ChecksPFP.address)
     const checks = await ethers.getContractAt('ERC721', '0x036721e5A769Cc48B3189EFbb9ccE4471E8A48B1')
 
     return { checksPFP, checks, owner, jalilVault }
