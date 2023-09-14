@@ -1,13 +1,19 @@
-# Sample Hardhat Project
+# Checks PFP
 
-This project demonstrates a basic Hardhat use case. It comes with a sample contract, a test for that contract, and a script that deploys that contract.
+| Check | Example Render |
+| --- | --- |
+| Checks #1776 | ![Checks PFP #1776](./renders/1776.svg) |
+| Checks #69 | ![Checks PFP #69](./renders/69.svg) |
+| Checks #15 | ![Checks PFP #15](./renders/15.svg) |
+| Checks #282 | ![Checks PFP #282](./renders/282.svg) |
+| Checks #1007 | ![Checks PFP #1007](./renders/1007.svg) |
+| Checks #376 | ![Checks PFP #376](./renders/376.svg) |
+| Checks #1001 | ![Checks PFP #1001](./renders/1001.svg) |
 
-Try running some of the following tasks:
+## Run Hardhat commands...
 
 ```shell
 npx hardhat help
 npx hardhat test
-REPORT_GAS=true npx hardhat test
 npx hardhat node
-npx hardhat run scripts/deploy.ts
 ```
