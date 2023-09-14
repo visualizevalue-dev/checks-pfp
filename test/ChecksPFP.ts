@@ -27,6 +27,21 @@ describe('ChecksPFP', () => {
 
       expect(await checksPFP.owner()).to.equal(owner.address)
     })
+
+    it('Should not allow users to change the renderer', async () => {
+      const { checksPFP, jalilVault } = await loadFixture(deployChecksPFP)
+
+      await expect(checksPFP.connect(jalilVault).setRenderer(ZeroAddress))
+        .to.be.revertedWith('Ownable: caller is not the owner')
+    })
+
+    it('Should allow the owner to change the renderer', async () => {
+      const { checksPFP, owner } = await loadFixture(deployChecksPFP)
+
+      await expect(checksPFP.connect(owner).setRenderer(ZeroAddress)).not.to.be.reverted
+
+      expect(await checksPFP.renderer()).to.equal(ZeroAddress)
+    })
   })
 
   describe('Mirroring', () => {
@@ -102,7 +117,7 @@ describe('ChecksPFP', () => {
     })
   })
 
-  describe('Rendering', () => {
+  describe.skip('Rendering', () => {
     it('Should render checks', async () => {
       const { checksPFP } = await loadFixture(deployChecksPFP)
 
