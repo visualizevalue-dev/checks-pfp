@@ -3,6 +3,8 @@ import { HardhatUserConfig } from 'hardhat/config'
 import '@nomicfoundation/hardhat-toolbox'
 import 'hardhat-deploy'
 
+import './tasks/mirror'
+
 const HARDHAT_NETWORK_CONFIG = {
   chainId: 1337,
   forking: {
